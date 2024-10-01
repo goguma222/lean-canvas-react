@@ -1,12 +1,6 @@
 {
   "canvases": [
     {
-      "id": 1,
-      "title": "친환경 도시 농업 플랫폼",
-      "lastModified": "2023-06-15",
-      "category": "농업"
-    },
-    {
       "id": 2,
       "title": "AI 기반 건강 관리 앱",
       "lastModified": "2023-06-10",
@@ -23,12 +17,6 @@
       "title": "VR 가상 여행 서비스",
       "lastModified": "2023-06-01",
       "category": "여행"
-    },
-    {
-      "title": "310802bf-f750-440f-8b39-fb5836058f68_새로운 린 캔번스",
-      "lastModified": "2024-10-01 14:51:02",
-      "category": "신규",
-      "id": 5
     }
   ]
 }

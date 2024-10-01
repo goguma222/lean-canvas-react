@@ -8,6 +8,7 @@ import { createCanvas, deleteCanvas, getCanvases } from '../api/canvas';
 import Loading from '../components/Loading';
 import Error from '../components/Error';
 import Button from '../components/Button';
+import Modal from '../components/Modal';
 
 function Home() {
   const [searchText, setSearchText] = useState();
@@ -15,6 +16,7 @@ function Home() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
 
   async function fetchData(params) {
     // 이렇게 해도 된다.
@@ -60,6 +62,7 @@ function Home() {
       setIsLoadingCreate(true);
       await createCanvas();
       debouncedFetchData({ title_like: searchText });
+      console.log(createCanvas(title));
     } catch (err) {
       alert(err.message);
     } finally {
@@ -116,6 +119,11 @@ function Home() {
           />
         )}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(true)}
+        onSubmit={handleCreateCanvas} // 모달에 제출 핸들러 전달
+      />
     </>
   );
 }
