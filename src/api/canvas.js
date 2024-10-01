@@ -17,7 +17,7 @@ export function getCanvases(params) {
 
 export async function createCanvas() {
   const newCanvas = {
-    title: uuidv4().substring(0, 4) + '_새로운 린 캔번스',
+    title: uuidv4().substring(0) + '_새로운 린 캔번스',
     lastModified: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     category: '신규',
   };
