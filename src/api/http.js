@@ -13,5 +13,20 @@ function create(baseURL, options) {
   return instance;
 }
 
-export const canvases = create('http://localhost:8000/canvases/');
+console.log(
+  'import.meta.env.VITE_API_BASE_URL: ',
+  import.meta.env.VITE_API_BASE_URL,
+);
+
+// VITE 환경변수
+export const canvases = create(
+  `${import.meta.env.VITE_API_BASE_URL}/canvases/`,
+);
+
+// 서버에 연결
+// export const canvases = create(
+//   'https://json-server-vercel-mu-umber.vercel.app/canvases/',
+// );
+
+// 로컬에 연결
 // export const posts = create('http://localhost:8000/posts/');

@@ -13,7 +13,7 @@ import CategoryFilter from '../components/CategoryFilter';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 function Home() {
-  const [searchText, setSearchText] = useState();
+  // const [searchText, setSearchText] = useState();
   const [isGridView, setIsGridView] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
@@ -33,9 +33,16 @@ function Home() {
   // 1] 데이터 조회
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['canvases', filter.searchText, filter.category],
-    queryFn: () =>
-      getCanvases({ title_like: filter.searchText, category: filter.category }),
-    initialData: [],
+    queryFn: () => {
+      console.log('fetching data');
+      return getCanvases({
+        title_like: filter.searchText,
+        category: filter.category,
+      });
+    },
+    // initialData: [], // 초기값을 캐싱해서 데이터 조회가 이루어 지지 않음
+    staleTime: 5000 * 60 * 5, // 5분동안 데이터가 신선함(fresh)를 유지하겠다라는 뜻이다.
+    refetchOnWindowFocus: false, // 다른 창을 왔다 갔다 해도 데이터를 가져오지 않는다. (refetching: 데이터를 가져오는중, refetching: 데이터를 가져오지 않는중) 기본 값이 true임
   });
 
   // 2] 등록할 때 useMutation 사용

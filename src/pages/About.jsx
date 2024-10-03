@@ -28,14 +28,19 @@ export default function About() {
   const { isLoading, error, data } = useQuery({
     queryKey: ['canvases'],
     queryFn: () =>
-      axios.get('http://localhost:8000/canvases').then(res => res.data),
+      axios
+        .get('https://json-server-vercel-mu-umber.vercel.app/canvases/')
+        .then(res => res.data),
     // 초기 데이터 설정 (이러한 속성은 캐싱을 설정할 때 유의해야함)
     initialData: [],
   });
 
   const { mutate: createNewCanvas, isLoading: isLoadingCreate } = useMutation({
     mutationFn: newCanvas =>
-      axios.post('http://localhost:8000/canvases', newCanvas),
+      axios.post(
+        'https://json-server-vercel-mu-umber.vercel.app/canvases/',
+        newCanvas,
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries(['canvases']);
     },

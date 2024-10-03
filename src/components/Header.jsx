@@ -1,4 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 import {
   FaHome,
   FaInfoCircle,
@@ -35,6 +37,14 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  const handleNavClick = item => {
+    if (item.id === 'about' || item.id === 'contact') {
+      toastr.error(`${item.label} 페이지는 현재 사용하실 수 없습니다.`);
+      return false;
+    }
+    return true;
+  };
+
   return (
     <header className="bg-gray-800 text-white px-4 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center h-14">
@@ -45,7 +55,17 @@ export default function Header() {
         </div>
         <nav className="space-x-4 md:flex hidden">
           {navItems.map(item => (
-            <NavLink key={item.id} to={item.to} className="hover:text-gray-300">
+            <NavLink
+              key={item.id}
+              to={item.to}
+              className="hover:text-gray-300"
+              onClick={e => {
+                const shouldNavigation = handleNavClick(item);
+                if (!shouldNavigation) {
+                  e.preventDefault(); // 페이지 전환 방지
+                }
+              }}
+            >
               {item.label}
             </NavLink>
           ))}
