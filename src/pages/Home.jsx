@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 import axios from 'axios';
 import CanvasList from '../components/CanvasList';
@@ -9,95 +9,95 @@ import Loading from '../components/Loading';
 import Error from '../components/Error';
 import Button from '../components/Button';
 import Modal from '../components/Modal';
+import CategoryFilter from '../components/CategoryFilter';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 function Home() {
   const [searchText, setSearchText] = useState();
   const [isGridView, setIsGridView] = useState(true);
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
-
-  async function fetchData(params) {
-    // 이렇게 해도 된다.
-    // const data = await fetch('http://localhost:8000/canvases')
-    //   .then(res => res.json())
-    //   .catch(console.error);
-
-    // 아래가 더 편함 (getCanvases.js에 비동기 할 코드들을 넣어서 재사용하면 된다.)
-    try {
-      setIsLoading(true);
-      setError(null);
-      await new Promise(resolver => setTimeout(resolver, 1000));
-      const response = await getCanvases(params); // Network 통신을 하는 중이다.
-      setData(response.data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  const debouncedFetchData = useCallback(
-    debounce(params => fetchData(params), 300),
-    [],
-  );
-
-  useEffect(() => {
-    if (searchText) {
-      debouncedFetchData({ title_like: searchText });
-    } else {
-      setData([]); // 검색어가 없으면 데이터 초기화
-    }
-
-    return () => {
-      debouncedFetchData.cancel();
-    };
-  }, [searchText, debouncedFetchData]);
-
-  // 등록하기 버튼 누를 때 클릭 막는 함수 (중복 클릭 막는 함수)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
-  const handleCreateCanvas = async () => {
-    try {
-      setIsLoadingCreate(true);
-      await createCanvas();
-      debouncedFetchData({ title_like: searchText });
-      console.log(createCanvas(title));
-    } catch (err) {
-      alert(err.message);
-    } finally {
-      setIsLoadingCreate(false);
-    }
+  const [filter, setFilter] = useState({
+    searchText: undefined,
+    category: undefined,
+  });
+
+  const handleFilter = (key, value) =>
+    setFilter({
+      ...filter,
+      [key]: value,
+    });
+
+  const queryClient = useQueryClient();
+
+  // 1] 데이터 조회
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['canvases', filter.searchText, filter.category],
+    queryFn: () =>
+      getCanvases({ title_like: filter.searchText, category: filter.category }),
+    initialData: [],
+  });
+
+  // 2] 등록할 때 useMutation 사용
+  const mutation = useMutation({
+    mutationFn: title => createCanvas(title),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['canvases']); // 쿼리 무효화
+      refetch();
+      setIsModalOpen(false); // 모달 닫기
+    },
+    onError: error => {
+      alert(error.message); // 에러 처리
+    },
+  });
+
+  // 3] 삭제
+  const { mutate: deleteCanvasMutation } = useMutation({
+    mutationFn: deleteCanvas,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['canvases']); // 쿼리 무효화
+    },
+    onError: error => {
+      alert(error.message); // 에러 처리
+    },
+  });
+
+  // 모달 핸들러
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCreateCanvas = title => {
+    mutation.mutate(title);
   };
 
   // 삭제기능
   const handleDeleteItem = async id => {
-    if (confirm('삭제 하시겠습니까?') === false) {
-      return;
-    }
+    // if (confirm('삭제 하시겠습니까?') === false) {
+    //   return;
+    // }
 
-    // delete logic 실행
-    try {
-      await deleteCanvas(id);
-      debouncedFetchData({ title_like: searchText });
-    } catch (err) {
-      alert(err.message);
-    }
+    deleteCanvasMutation(id);
   };
 
-  // 검색기능
-  // const filteredData = data.filter(item =>
-  //   item.title.toLowerCase().includes(searchText.toLowerCase()),
-  // );
   return (
     <>
       <div>
         <div className="mb-6 flex flex-col sm:flex-row items-center justify-between">
-          <SearchBar searchText={searchText} setSearchText={setSearchText} />
+          <div className="flex gap-2 flex-col w-full sm:flex-row mb-4 sm:mb-0">
+            <SearchBar
+              searchText={filter.searchText}
+              onSearch={val => handleFilter('searchText', val)}
+            />
+            <CategoryFilter
+              category={filter.category}
+              onChange={val => handleFilter('category', val)}
+            />
+          </div>
           <ViewToggle isGridView={isGridView} setIsGridView={setIsGridView} />
         </div>
         <div className="flex justify-end mb-6">
-          <Button onClick={handleCreateCanvas} loading={isLoadingCreate}>
+          <Button onClick={handleOpenModal} loading={isLoadingCreate}>
             등록하기
           </Button>
         </div>
@@ -105,23 +105,21 @@ function Home() {
         {error && (
           <Error
             message={error.message}
-            onRetry={() => fetchData({ title_like: searchText })}
+            onRetry={refetch} // refetch를 사용하여 재시도
           />
         )}
-        {/* 로딩이 없고, 에러가 없다면 실행 */}
         {!isLoading && !error && (
-          // 목록이 없습니다.
           <CanvasList
             filteredData={data}
             isGridView={isGridView}
-            searchText={searchText}
+            searchText={filter.searchText}
             onDeleteItem={handleDeleteItem}
           />
         )}
       </div>
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(true)}
+        onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreateCanvas} // 모달에 제출 핸들러 전달
       />
     </>

@@ -8,9 +8,9 @@ export default function Modal({ isOpen, onClose, onSubmit }) {
   const handleSubmit = e => {
     e.preventDefault(); // 기본 제출 이벤트 방지
     if (title.trim()) {
-      onSubmit(title);
-      setTitle('');
-      onClose();
+      onSubmit(title); // 타이틀 전달
+      setTitle(''); // 입력 초기화
+      onClose(); // 모달 닫기
     } else {
       alert('타이틀을 입력해주세요.');
     }

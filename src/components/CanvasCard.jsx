@@ -1,17 +1,41 @@
+// CanvasCard.jsx
+
 import { FaPlus } from 'react-icons/fa';
 import Note from './Note';
-import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function CanvasCard({ title, isSubTitle = false }) {
-  const [notes, setNotes] = useState([]); // 노트 추가 초기화
-  // 노트추가함수
+export default function CanvasCard({
+  title,
+  isSubTitle = false,
+  notes = [], // 기본값으로 빈 배열 설정
+  onNotesChange,
+}) {
+  // 노트 추가 함수
   const handleAddNote = () => {
-    setNotes([...notes, { id: uuidv4(), content: '' }]);
+    if (!Array.isArray(notes)) {
+      // console.error('notes is not an array:', notes); // 디버깅을 위한 로그
+      return; // notes가 배열이 아닐 경우 함수 종료
+    }
+
+    const newNote = {
+      id: uuidv4(),
+      content: '',
+      color: '',
+    };
+    onNotesChange([...notes, newNote]);
   };
-  // 노트제거함수
+
+  // 노트 제거 함수
   const handleRemoveNote = id => {
-    setNotes(notes.filter(note => note.id !== id));
+    onNotesChange(notes.filter(note => note.id !== id));
+  };
+
+  // 노트 업데이트 함수
+  const handleUpdateNote = (id, content, color) => {
+    // console.log('Updating note:', { id, content, color });
+    onNotesChange(
+      notes.map(note => (note.id === id ? { ...note, content, color } : note)),
+    );
   };
 
   return (
@@ -21,21 +45,28 @@ export default function CanvasCard({ title, isSubTitle = false }) {
       >
         <h3 className={`${isSubTitle === false && 'font-bold'}`}>{title}</h3>
         <button
-          className="bg-blue-400  text-white p-1.5 text-xs rounded-md"
+          className="bg-blue-400 text-white p-1.5 text-xs rounded-md"
           onClick={handleAddNote}
         >
           <FaPlus />
         </button>
       </div>
       <div className="space-y-3 min-h-32 p-3">
-        {notes.map(note => (
-          <Note
-            key={note.id}
-            id={note.id}
-            content={note.content}
-            onRemoveNote={handleRemoveNote}
-          />
-        ))}
+        {Array.isArray(notes) &&
+          notes.map(
+            (
+              note, // notes가 배열인지 확인
+            ) => (
+              <Note
+                key={note.id}
+                id={note.id}
+                content={note.content}
+                color={note.color}
+                onRemoveNote={handleRemoveNote}
+                onUpdateNote={handleUpdateNote}
+              />
+            ),
+          )}
       </div>
     </div>
   );
