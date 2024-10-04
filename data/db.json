@@ -229,18 +229,9 @@
     },
     {
       "title": "할리데이비슨",
-      "lastModified": "2024-10-03 13:45:30",
+      "lastModified": "2024-10-04 17:17:37",
       "category": "신규",
-      "id": 6,
-      "problem": {
-        "notes": [
-          {
-            "id": "6d821ca2-6da7-4410-9f59-eff92fc8d673",
-            "content": "오늘은 엔진오일 교체하는 날",
-            "color": "bg-green-300"
-          }
-        ]
-      }
+      "id": 6
     }
   ]
 }
