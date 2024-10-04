@@ -2,6 +2,7 @@ export default function CategoryFilter({ category, onChange }) {
   const categories = [
     '신규',
     '헬스케어',
+    '공부',
     '물류',
     '여행',
     '자동차',
