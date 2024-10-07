@@ -67,7 +67,13 @@ export async function deleteBoards(id) {
 export async function getBoardById(id) {
   const boardDoc = doc(db, 'board', id);
   const boardData = await getDoc(boardDoc);
-  return { id: boardData.id, ...boardData.data() }; // 반환할 데이터
+
+  // 문서가 존재하는지 확인
+  if (boardData.exists()) {
+    return { id: boardData.id, ...boardData.data() }; // 반환할 데이터
+  } else {
+    throw new Error('게시글을 찾을 수 없습니다.');
+  }
 }
 
 // 타이틀 업데이트

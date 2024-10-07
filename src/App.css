@@ -13,3 +13,6 @@ a {
 .inactive {
   color: #000;
 }
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+}

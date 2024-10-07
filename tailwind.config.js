@@ -11,6 +11,7 @@ export default {
         'calc-50p-38p': 'calc(50% - 38%)',
         'calc-50p-30p': 'calc(50% - 30%)',
         'calc-50p-10p': 'calc(50% - 10%)',
+        'calc-100p-60p': 'calc(100% - 60px)',
       },
     },
   },
