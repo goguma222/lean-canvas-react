@@ -65,7 +65,7 @@ export default function InquiryWritingForm({ onSubmit }) {
             <div className="formGroup border p-2 rounded-lg w-full flex items-center mb-4">
               <label
                 htmlFor="title"
-                className="inline-block w-calc-50p-10p sm:calc-50-30p md:w-calc-50p-30p xl:calc-50p-42p border-r border-gray-400 mr-4"
+                className="inline-block w-calc-50p-10p sm:calc-50-30p md:w-calc-50p-38p xl:calc-50p-42p border-r border-gray-400 mr-4"
               >
                 제목
               </label>
