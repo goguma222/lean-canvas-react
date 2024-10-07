@@ -32,6 +32,11 @@ export default function Header() {
       icon: <FaEnvelope />,
       to: 'contact',
     },
+    {
+      id: 'board',
+      label: 'Board',
+      to: 'board',
+    },
   ];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -73,7 +78,13 @@ export default function Header() {
         <button className="md:hidden" onClick={toggleMenu}>
           <FaBars />
         </button>
-        <Button className="hidden md:block">게시판</Button>
+        {/* <Button className="hidden md:block">게시판</Button> */}
+        <Link
+          to={'/board'}
+          className="hidden md:block bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5px px-4 rounded transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        >
+          게시판
+        </Link>
       </div>
 
       {/* Mobile Menu */}
@@ -91,7 +102,16 @@ export default function Header() {
         </div>
         <nav className="flex flex-col space-y-4 p-4">
           {navItems.map(item => (
-            <NavLink key={item.id} to={item.to}>
+            <NavLink
+              key={item.id}
+              to={item.to}
+              onClick={e => {
+                const shouldNavigation = handleNavClick(item);
+                if (!shouldNavigation) {
+                  e.preventDefault(); // 페이지 전환 방지
+                }
+              }}
+            >
               {item.label}
             </NavLink>
           ))}

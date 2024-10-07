@@ -98,7 +98,9 @@ function Home() {
 
   // 삭제기능
   const handleDeleteItem = async id => {
-    deleteCanvasMutation(id);
+    if (confirm('선택한 리스트를 삭제하시겠습니까?') === true) {
+      deleteCanvasMutation(id);
+    }
   };
 
   return (

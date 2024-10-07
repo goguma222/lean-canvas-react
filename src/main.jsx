@@ -11,6 +11,10 @@ import Contact from './pages/Contact';
 import CanvasDetail from './pages/CanvasDetail';
 import ErrorPage from './pages/ErrorPage';
 import './index.css';
+import Board from './pages/Board';
+import InquiryWriting from './pages/board/InquiryWriting';
+import BoardDetail from './pages/board/BoardDetail';
+import BoardDetailView from './pages/board/BoardDetailView';
 
 // QueryClient() 생성하기
 const queryClient = new QueryClient();
@@ -32,9 +36,25 @@ const router = createBrowserRouter([
         path: '/contact',
         element: <Contact />,
       },
+      // {
+      //   path: '/canvases/:id',
+      //   element: <CanvasDetail />,
+      // },
       {
-        path: '/canvases/:id',
-        element: <CanvasDetail />,
+        path: '/board',
+        element: <Board />,
+      },
+      {
+        path: '/board/InquiryWriting',
+        element: <InquiryWriting />,
+      },
+      {
+        path: '/board/:id',
+        element: <BoardDetailView />,
+      },
+      {
+        path: '/board/InquiryWriting/:id',
+        element: <BoardDetail />,
       },
     ],
     errorElement: <ErrorPage />,
