@@ -1,4 +1,5 @@
 import { FaArrowLeft } from 'react-icons/fa';
+import { TbWriting } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 
 function BoardDetailViewItem({ board }) {
@@ -10,12 +11,17 @@ function BoardDetailViewItem({ board }) {
             <Link to="/board" className="mb-6 block">
               <FaArrowLeft />
             </Link>
-            <h2 className="flex justify-start gap-2 mb-3">
-              제목 : {board.title}
-            </h2>
-            <h3 className="fflex justify-start gap-2 mb-3">
-              이름 : {board.name}
-            </h3>
+            <div>
+              <h2 className="flex justify-start gap-2 mb-3">
+                <span className="w-6 h-6 rounded-md p-1 bg-gray-800 relative">
+                  <TbWriting className="text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                </span>
+                제목 : {board.title}
+              </h2>
+              <h3 className="flex justify-start gap-2 mb-3">
+                작성자 : {board.name}
+              </h3>
+            </div>
             <h4 className="flex justify-start gap-2 mb-3">
               카테고리 : {board.category}
             </h4>

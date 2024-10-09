@@ -129,7 +129,7 @@ export default function InquiryWritingForm({ onSubmit }) {
                 id="content"
                 onChange={e => setContent(e.target.value)}
                 ref={contentRef}
-                className="bg-gray-100 w-full py-1 px-3 rounded"
+                className="bg-gray-100 w-full py-1 px-3 rounded min-h-[220px]"
               ></textarea>
             </div>
             <div className="flex justify-end mt-8">
