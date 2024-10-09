@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import Button from '../components/Button';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 /**
  * 1. queryClient를 생성한다.
@@ -16,6 +18,18 @@ import Button from '../components/Button';
  *
  */
 export default function About() {
+  // 해당 페이지로 접근 시 차단 방법
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cutOff = false;
+
+    if (!cutOff) {
+      alert('이 페이지에 접근할 수 없습니다.');
+      navigate('/');
+    }
+  }, [navigate]);
+
   const queryClient = useQueryClient();
 
   /**
