@@ -76,7 +76,7 @@ export default function InquiryWritingForm({ onSubmit }) {
                 placeholder="제목을 입력해주세요."
                 onChange={e => setTitle(e.target.value)}
                 ref={titleRef}
-                className="bg-gray-100 w-full py-1 px-3 rounded"
+                className="bg-gray-200 w-full py-1 px-3 rounded"
               />
             </div>
             <div className="formGroup border p-2 rounded-lg w-full flex items-center mb-4">
@@ -93,7 +93,7 @@ export default function InquiryWritingForm({ onSubmit }) {
                 placeholder="이름을 입력해주세요."
                 onChange={e => setName(e.target.value)}
                 ref={nameRef}
-                className="bg-gray-100 w-full py-1 px-3 rounded"
+                className="bg-gray-200 w-full py-1 px-3 rounded"
               />
             </div>
             <div className="formGroup border p-2 rounded-lg w-full flex items-center mb-4">
@@ -108,7 +108,7 @@ export default function InquiryWritingForm({ onSubmit }) {
                 id="category"
                 value={category} // 현재 선택된 카테고리
                 onChange={e => setCategory(e.target.value)} // 카테고리 선택 시 상태 업데이트
-                className="bg-gray-100 py-1 px-3 rounded w-full"
+                className="bg-gray-200 py-1 px-3 rounded w-full"
               >
                 {categories.map(cat => (
                   <option key={cat} value={cat}>
@@ -129,7 +129,7 @@ export default function InquiryWritingForm({ onSubmit }) {
                 id="content"
                 onChange={e => setContent(e.target.value)}
                 ref={contentRef}
-                className="bg-gray-100 w-full py-1 px-3 rounded min-h-[220px]"
+                className="bg-gray-200 w-full py-1 px-3 rounded min-h-[220px]"
               ></textarea>
             </div>
             <div className="flex justify-end mt-8">
